@@ -1,4 +1,4 @@
-from .transcriptor import Transcriptor
+from transcriptor import Transcriptor
 
 def main():
     while True:

@@ -7,13 +7,11 @@ class Transcriptor:
         self.video_id = self.extract_video_id()
 
     def extract_video_id(self):
-        # Use yt_dlp to extract the video ID from the URL
         with yt_dlp.YoutubeDL() as ydl:
             info = ydl.extract_info(self.url, download=False)
             return info.get("id")
         
     def _get_text(self, snippet):
-    # Compatível com versões que retornam objetos OU dicts
         if isinstance(snippet, dict):
             return snippet.get("text", "")
         return getattr(snippet, "text", "")
@@ -23,7 +21,6 @@ class Transcriptor:
         langs = langs or ["pt", "pt-BR", "en"]
         api = youtube_transcript_api.YouTubeTranscriptApi()
 
-        # 1) Tenta oficial nas línguas preferidas
         try:
             data = api.fetch(self.video_id, languages=langs)
             return " ".join(t for t in (self._get_text(s) for s in data) if t.strip())
@@ -32,14 +29,11 @@ class Transcriptor:
         except youtube_transcript_api.TranscriptsDisabled:
             return "Transcrições desabilitadas para este vídeo."
         except Exception as e:
-            # Outros erros (idade, geoblock etc.)
             return f"Falha ao obter transcrição oficial: {e}"
 
-        # 2) Cai para listagem e tenta 'generated' e depois qualquer uma
         try:
             listing = api.list(video_id)
 
-            # Tenta geradas automaticamente nas línguas preferidas
             for lang in langs:
                 try:
                     t = listing.find_generated_transcript([lang])
@@ -48,7 +42,6 @@ class Transcriptor:
                 except Exception:
                     continue
 
-            # Último recurso: primeira disponível (oficial ou gerada)
             for t in listing:
                 try:
                     data = t.fetch()

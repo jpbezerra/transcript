@@ -5,6 +5,9 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "agno>=2.1.8",
+    "dotenv>=0.9.9",
+    "groq>=0.32.0",
     "youtube-transcript-api>=1.2.3",
     "yt-dlp>=2025.10.14",
 ]

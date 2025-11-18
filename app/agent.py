@@ -1,5 +1,6 @@
 from agno.agent import Agent
 from agno.models.groq import Groq
+from agno.models.google import Gemini
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -10,7 +11,8 @@ class TranscriptSummarizer:
     def __init__(self):
         """Inicializa o summarizer com configurações padrão do Agno."""
         self.client = Agent(
-            model=Groq(id="llama-3.3-70b-versatile"),
+            # model=Groq(id="llama-3.3-70b-versatile"),
+            model=Gemini(id="gemini-2.5-flash"),
             name="TranscriptSummarizerAgent",
             instructions="Você é um assistente especializado em criar resumos detalhados e informativos de transcrições de vídeos.",
         )
